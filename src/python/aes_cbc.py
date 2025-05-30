@@ -142,9 +142,15 @@ def aes_cbc(input: str, key: str, iv: str, operation: str):
         else:
             ct_in = input_in_hex[block_size_bits * i // 8: (block_size_bits * (i + 1)) // 8]
             logger.debug(f"ct_in: {ct_in}")
-            block_out = InvCipher(ct_in, key)
+            if i == 0:
+                chain_iv = iv
+                last_block_ct = ct_in
+            else:
+                chain_iv = last_block_ct.hex()
+            block_out = _aes_cbc_decrypt(ct_in, key, chain_iv)
             logger.debug(f"pt_out: {block_out}")
             out += (block_out)
+            last_block_ct = ct_in
     logger.debug(f"output: {out}\n")
     return out
 
@@ -162,6 +168,21 @@ def _aes_cbc_encrypt(plaintext: bytes, key: str, chain_iv: str, test_block: BLOC
     
     return ciphertext
 
+def _aes_cbc_decrypt(ciphertext: bytes, key: str, chain_iv, test_block: BLOCK = None):
+    chain_iv_hex = bytes.fromhex(chain_iv)
+
+    input = ciphertext
+    output = InvCipher(input, key)
+    plaintext = bytes(a ^ b for a, b in zip(bytes.fromhex(output), chain_iv_hex))
+
+
+    if test_block != None:
+        assert(bytes.fromhex(test_block.input) == input)
+        assert(test_block.output == output)
+        assert(bytes.fromhex(test_block.plaintext) == plaintext)
+    
+    return (plaintext.hex())
+
 
 def test_aes_cbc_encrypt_blocks():
     for test in test_cases:
@@ -174,7 +195,20 @@ def test_aes_cbc_encrypt_blocks():
             else:
                 chain_iv = last_block_ct
             last_block_ct = _aes_cbc_encrypt(bytes.fromhex(block.plaintext), test.key, chain_iv, block)
-        
+
+def test_aes_cbc_decrypt_blocks():
+    for test in test_cases:
+        if test.operation != "DECRYPT":
+            continue
+        last_block_ct = ""
+        for block in test.blocks:
+            if block.block_number == 1:
+                chain_iv = test.iv
+                last_block_ct = block.ciphertext
+            else:
+                chain_iv = last_block_ct
+            plaintext = _aes_cbc_decrypt(bytes.fromhex(block.ciphertext), test.key, chain_iv, block)
+            last_block_ct = block.ciphertext        
 
 
 def test_aes_cbc_encrypt():
@@ -198,5 +232,6 @@ if __name__ == "__main__":
     )
     logging.getLogger(__name__).setLevel(logging.DEBUG)
     test_aes_cbc_encrypt_blocks()
+    test_aes_cbc_decrypt_blocks()
     test_aes_cbc_encrypt()
     test_aes_cbc_decrypt()
