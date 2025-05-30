@@ -4,8 +4,6 @@ from aes_decrypt import InvCipher
 from dataclasses import dataclass
 import logging
 
-import sys
-
 logger = logging.getLogger(__name__)
 
 # AES Constants
@@ -27,6 +25,7 @@ class TEST_CASE:
     blocks: BLOCK
     key: str
     operation: str
+    iv: str = None
 
 plaintext  = "6bc1bee22e409f96e93d7e117393172a" \
              "ae2d8a571e03ac9c9eb76fac45af8e51" \
@@ -113,8 +112,9 @@ def aes_ecb(input: str, key: str, operation: str):
 
     input_num_of_blocks = len(input) // (128 // 4)
     out = ""
-    logger.debug(f"\nAES_ECB {operation}, {input_num_of_blocks} of blocks, key length: {key_len * 4}")
-    logger.debug(f"key: {key}")
+    logger.debug(f"AES_ECB {operation}, {input_num_of_blocks} of blocks, key length: {key_len * 4}")
+    logger.debug(f"input: {input}")
+    logger.debug(f"key: {key}\n")
     for i in range(input_num_of_blocks):
         logger.debug(f"block: {i}")
         if operation == "ENCRYPT":
@@ -129,8 +129,7 @@ def aes_ecb(input: str, key: str, operation: str):
             block_out = InvCipher(ct_in, key)
             logger.debug(f"pt_out: {block_out}")
             out += (block_out)
-
-    
+    logger.debug(f"output: {out}\n")
     return out
 
 def test_aes_ecb_encrypt():
