@@ -129,7 +129,10 @@ def SubWord(word):
     return int.from_bytes(subword_hex, 'big')
 
 def Cipher(text_in, w):
-    text_in_hex = bytes.fromhex(text_in)
+    text_in_hex = text_in
+    if isinstance(text_in_hex, str):
+        logger.info("input was string not binary")
+        text_in_hex = bytes.fromhex(text_in)
     state = []
     # s[r,c]=in[r+4c] for0≤r<4 and 0≤c<Nb, (3.3)
     for r in range(0,4):

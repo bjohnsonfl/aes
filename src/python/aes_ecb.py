@@ -109,23 +109,28 @@ def aes_ecb(input: str, key: str, operation: str):
     if (operation != "ENCRYPT") and (operation != "DECRYPT"):
         logger.fatal("operation: {operation} is invalid. 'ENCRYPT' or 'DECRYPT' are only valid types")
         assert(0)
+    
+    if isinstance(input, str):
+        input_in_hex = bytes.fromhex(input)
 
     input_num_of_blocks = len(input) // (128 // 4)
     out = ""
     logger.debug(f"AES_ECB {operation}, {input_num_of_blocks} of blocks, key length: {key_len * 4}")
-    logger.debug(f"input: {input}")
+    logger.debug(f"input: {input_in_hex.hex()}")
     logger.debug(f"key: {key}\n")
+
+
     for i in range(input_num_of_blocks):
         logger.debug(f"block: {i}")
         if operation == "ENCRYPT":
-            pt_in = input[block_size_bits * i // 4: (block_size_bits * (i + 1)) // 4]
-            logger.debug(f"pt_in: {pt_in}")
+            pt_in = input_in_hex[block_size_bits * i // 8: (block_size_bits * (i + 1)) // 8]
+            logger.debug(f"pt_in: {pt_in.hex()}")
             block_out = Cipher(pt_in, key)
             logger.debug(f"ct_out: {block_out}")
             out += (block_out)
         else:
-            ct_in = input[block_size_bits * i // 4: (block_size_bits * (i + 1)) // 4]
-            logger.debug(f"ct_in: {ct_in}")
+            ct_in = input_in_hex[block_size_bits * i // 8: (block_size_bits * (i + 1)) // 8]
+            logger.debug(f"ct_in: {ct_in.hex()}")
             block_out = InvCipher(ct_in, key)
             logger.debug(f"pt_out: {block_out}")
             out += (block_out)
