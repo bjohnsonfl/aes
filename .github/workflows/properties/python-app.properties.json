@@ -1,0 +1,6 @@
+{
+    "name": "Python AES",
+    "description": "Create and test a AES Core and Modes.",
+    "iconName": "python",
+    "categories": ["Continuous integration", "Python", "Bottle", "Flask"]
+}
