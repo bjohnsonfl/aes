@@ -15,6 +15,7 @@ Nist Test vectors
 * https://csrc.nist.gov/projects/cryptographic-algorithm-validation-program/block-ciphers#AES
 
 ```
+./scripts/download_nist.sh
 python3 -m pip install pycryptodome pytest
 PYTHONPATH=src pytest
 ```
