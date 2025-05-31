@@ -38,7 +38,7 @@ jobs:
 #        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test RSP Parser 
       run: |
-        pytest
+        pytest test/scripts -v
     - name: Test Python AES Cores and Modes with signle test vector 
       run: |
-        PYTHONPATH=src pytest test/python
+        PYTHONPATH=src pytest test/python -v
