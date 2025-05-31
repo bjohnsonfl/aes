@@ -28,7 +28,7 @@ jobs:
     - name: Install dependencies
       run: |
         python3 -m pip install --upgrade pip
-        pip install flake8 pytest
+        pip install flake8 pytest pycryptodome
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 #    - name: Lint with flake8
 #      run: |
@@ -36,6 +36,15 @@ jobs:
 #        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
 #        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
 #        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with pytest
+    - name: Test RSP Parser 
       run: |
-        PYTHONPATH=src pytest
+        pytest test/scripts -v
+    - name: Test Python AES Cores and Modes with signle test vector 
+      run: |
+        PYTHONPATH=src pytest test/python -v
+    - name: Test Python AES Cores and Modes with nist KAT_AES 
+      run: |
+        PYTHONPATH=src pytest test/nist/KAT_AES/ -v
+    - name: Test All
+      run: | 
+        PYTHONPATH=src pytest -v
