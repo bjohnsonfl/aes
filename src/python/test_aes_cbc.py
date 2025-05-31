@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import logging
 
-from aes_cbc import aes_cbc, _aes_cbc_encrypt, _aes_cbc_decrypt
+from aes_modes import aes_cbc, _aes_cbc_encrypt, _aes_cbc_decrypt
 
 logger = logging.getLogger(__name__)
 
