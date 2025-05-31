@@ -1,9 +1,22 @@
 import logging
-from src.python.aes_encrypt import Cipher, KeyExpansion, Nk
+from src.python.aes_encrypt import Cipher, KeyExpansion
 
 def test_cipher():
     key = "2b7e151628aed2a6abf7158809cf4f3c"
-    KeyExpansion(key, Nk)
+    
+    key_len = len(key) * 4
+    if key_len == 128:
+        Nk = 4
+        Nr = 10
+    elif key_len == 192:
+        Nk = 6
+        Nr = 12
+    elif key_len == 256:
+        Nk = 8
+        Nr = 14
+    else:
+        assert(0)
+    KeyExpansion(key, Nk, Nr)
 
     # Input      = 32 43 f6 a8 88 5a 30 8d 31 31 98 a2 e0 37 07 34 
     # Cipher Key = 2b 7e 15 16 28 ae d2 a6 ab f7 15 88 09 cf 4f 3c
