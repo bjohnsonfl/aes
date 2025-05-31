@@ -1,0 +1,49 @@
+name: hdl-build
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the $default-branch branch
+  push:
+    branches:
+      - "*"
+  pull_request:
+    branches:
+      - "main"
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    runs-on: macos-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v4
+      
+    # Set up Python 
+    - name: Set up Python 3.13.1
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.13.1"
+
+    # Install Python dependencies and Cocotb
+    - name: Install dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        pip install flake8 pytest cocotb
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+    # Install Verilator (MacOS)
+    - name: Set up Verilator (MacOS)
+      run: |
+        brew install verilator
+        
+    # Run tests
+    - name: Run Cocotb
+      run: |
+        pytest examples/

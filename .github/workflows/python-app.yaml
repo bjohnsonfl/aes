@@ -7,10 +7,14 @@ on:
   push:
     branches:
       - "*"
+    paths-ignore:
+      - "./.github/workflows/hdl-build.yaml"
   pull_request:
     branches:
       - "main"
 
+  workflow_dispatch:
+  
 permissions:
   contents: read
 
@@ -53,4 +57,4 @@ jobs:
         PYTHONPATH=src pytest test/nist/aesmmt/ -v
     - name: Test All
       run: | 
-        PYTHONPATH=src pytest -v
+        PYTHONPATH=src pytest test/ -v
