@@ -2,10 +2,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# AES128 Constants
-Nr = 10
+# AES Constants
 Nb = 4
-Nk = 4
 
 s_box = [[0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76], 
          [0xca, 0x82, 0xc9, 0x7d, 0xfa, 0x59, 0x47, 0xf0, 0xad, 0xd4, 0xa2, 0xaf, 0x9c, 0xa4, 0x72, 0xc0], 
@@ -149,6 +147,20 @@ def InvCipher(text_in, w):
     if isinstance(text_in_hex, str):
         text_in_hex = bytes.fromhex(text_in)
     state = []
+
+    key_len = len(w) * 4
+    if key_len == 128:
+        Nk = 4
+        Nr = 10
+    elif key_len == 192:
+        Nk = 6
+        Nr = 12
+    elif key_len == 256:
+        Nk = 8
+        Nr = 14
+    else:
+        assert(0)
+
     # s[r,c]=in[r+4c] for0≤r<4 and 0≤c<Nb, (3.3)
     for r in range(0,4):
         row = []
@@ -156,7 +168,7 @@ def InvCipher(text_in, w):
             row.append(text_in_hex[r+4*c])
         state.append(row)
     
-    w = KeyExpansion(w, Nk)
+    w = KeyExpansion(w, Nk, Nr)
 
     logger.debug("\nRound: 0")
     logger.debug("iinput")
@@ -181,7 +193,7 @@ def InvCipher(text_in, w):
     logger.debug(f'out: {out}')
     return out
 
-def KeyExpansion(key, Nk):
+def KeyExpansion(key, Nk, Nr):
     temp = None
     w = []
     key_hex = bytes.fromhex(key)
@@ -201,8 +213,10 @@ def KeyExpansion(key, Nk):
 
     for i in range(Nk, Nb * (Nr+1)):
         temp = w[i-1]
-        if (i%Nk ==0):
+        if (i%Nk==0):
             temp = SubWord(RotWord(temp)) ^ rcon_arr[i//Nk]
+        elif (Nk > 6 and (i % Nk) == 4):
+            temp = SubWord(temp)
         w.append( w[i-Nk] ^ temp )
         logger.debug(f'{i//4}: {hex(w[i])}')
 
