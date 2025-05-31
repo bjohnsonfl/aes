@@ -33,10 +33,10 @@ jobs:
 
     # Install Python dependencies and Cocotb
     - name: Install dependencies
-    run: |
-      python3 -m pip install --upgrade pip
-      pip install flake8 pytest cocotb
-      if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      run: |
+        python3 -m pip install --upgrade pip
+        pip install flake8 pytest cocotb
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
     # Install Verilator (MacOS)
     - name: Set up Verilator (MacOS)
