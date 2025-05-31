@@ -57,4 +57,4 @@ jobs:
         PYTHONPATH=src pytest test/nist/aesmmt/ -v
     - name: Test All
       run: | 
-        PYTHONPATH=src pytest -v
+        PYTHONPATH=src pytest test/ -v
