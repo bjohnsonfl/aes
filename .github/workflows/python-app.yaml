@@ -45,6 +45,6 @@ jobs:
     - name: Test Python AES Cores and Modes with nist KAT_AES 
       run: |
         PYTHONPATH=src pytest test/nist/KAT_AES/ -v
-    -name: Test All
+    - name: Test All
       run: | 
         PYTHONPATH=src pytest -v
