@@ -1,5 +1,4 @@
 name: hdl-build
-
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the $default-branch branch
@@ -15,12 +14,10 @@ on:
 
 permissions:
   contents: read
-
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: macos-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
