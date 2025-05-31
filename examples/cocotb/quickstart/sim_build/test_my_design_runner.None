@@ -1,0 +1,7 @@
+<testsuites name="results">
+  <testsuite name="all" package="all">
+    <property name="random_seed" value="1748709286" />
+    <testcase name="my_first_test" classname="test_my_design" file="/Users/blake/Development/AES/examples/cocotb/quickstart/test_my_design.py" lineno="10" time="0.0006432533264160156" sim_time_ns="21.0" ratio_time="32646.547071905115" />
+    <testcase name="my_second_test" classname="test_my_design" file="/Users/blake/Development/AES/examples/cocotb/quickstart/test_my_design.py" lineno="40" time="0.0002799034118652344" sim_time_ns="7.0" ratio_time="25008.626916524703" />
+  </testsuite>
+</testsuites>

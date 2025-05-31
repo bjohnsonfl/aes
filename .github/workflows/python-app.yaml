@@ -7,10 +7,14 @@ on:
   push:
     branches:
       - "*"
+    paths-ignore:
+      - "./.github/workflows/hdl-build.yaml"
   pull_request:
     branches:
       - "main"
 
+  workflow_dispatch:
+  
 permissions:
   contents: read
 
