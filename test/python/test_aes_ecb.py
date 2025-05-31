@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import logging
 
-from aes_modes import aes_ecb
+from src.python.aes_modes import aes_ecb
 
 logger = logging.getLogger(__name__)
 
