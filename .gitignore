@@ -2,5 +2,5 @@
 **/.pytest_cache/
 **/__pycache__/
 **/.DS_Store/
-nist/
+/nist/
 **/sim_build/
